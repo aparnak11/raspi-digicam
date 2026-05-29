@@ -2,8 +2,8 @@ from PIL import Image, ImageDraw
 from picamera2 import Picamera2
 from pathlib import Path
 from datetime import datetime
-import st7796
-import ft6336u
+from vendor.waveshare import st7796
+from vendor.waveshare import ft6336u
 import time
 
 # ---------- Paths ----------

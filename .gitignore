@@ -1,0 +1,7 @@
+photos/*.jpg
+photos/*.png
+
+__pycache__/
+*.pyc
+
+.vscode/
