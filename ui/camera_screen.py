@@ -22,10 +22,10 @@ def draw_camera(frame=None, message="READY"):
 
     draw.rectangle((0, 0, LW, 36), fill=LIGHT_PINK)
     draw.text((14, 10), "APARNA'S DIGICAM", fill=BLACK)
-    draw.text((LW - 62, 10), "64GB", fill=BLACK)
+    draw.text((LW - 37, 10), "64GB", fill=BLACK)
 
-    vf_x1, vf_y1 = 92, 52
-    vf_x2, vf_y2 = 388, 255
+    vf_x1, vf_y1 = 85, 45
+    vf_x2, vf_y2 = 398, 278
 
     if frame is not None:
         frame = frame.resize((vf_x2 - vf_x1, vf_y2 - vf_y1))
@@ -41,7 +41,7 @@ def draw_camera(frame=None, message="READY"):
         outline=PINK,
         width=2,
     )
-    draw.text((22, 90), "MODE", fill=BLACK)
+    draw.text((30, 90), "MODE", fill=BLACK)
 
     draw.rounded_rectangle(
         GALLERY_BOX,
@@ -50,14 +50,13 @@ def draw_camera(frame=None, message="READY"):
         outline=PINK,
         width=2,
     )
-    draw.text((18, 175), "GALL", fill=BLACK)
+    draw.text((23, 175), "GALLERY", fill=BLACK)
 
     draw.ellipse(CAPTURE_BOX, outline=DARK_PINK, width=5)
     draw.ellipse((420, 135, 450, 165), fill=PINK)
-    draw.text((410, 190), "CAPTURE", fill=BLACK)
 
     draw.rectangle((0, LH - 32, LW, LH), fill=LIGHT_PINK)
-    draw.text((18, LH - 22), message, fill=BLACK)
-    draw.text((LW - 70, LH - 22), "PHOTO", fill=BLACK)
+    draw.text((14, LH - 22), message, fill=BLACK)
+    draw.text((LW - 45, LH - 22), "PHOTO", fill=BLACK)
 
     render(image)
