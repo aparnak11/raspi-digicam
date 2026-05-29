@@ -11,6 +11,7 @@ from config import (
     BACK_BOX,
     PREV_BOX,
     NEXT_BOX,
+    DELETE_BOX,
 )
 
 from gallery import load_gallery_image
@@ -32,7 +33,7 @@ def draw_gallery(photo_paths, gallery_index):
     )
     draw.text((35, 13), "BACK", fill=BLACK)
 
-    draw.text((210, 10), "GALLERY", fill=BLACK)
+    draw.text((220, 10), "GALLERY", fill=BLACK)
 
     if not photo_paths:
         draw.text((175, 150), "NO PHOTOS YET", fill=BLACK)
@@ -66,5 +67,14 @@ def draw_gallery(photo_paths, gallery_index):
     draw.text((422, 152), "NEXT", fill=BLACK)
 
     draw.rectangle((0, LH - 32, LW, LH), fill=LIGHT_PINK)
+
+    draw.rounded_rectangle(
+        DELETE_BOX,
+        radius=8,
+        fill=WHITE,
+        outline=PINK,
+        width=2,
+    )
+    draw.text((225, 294), "DELETE", fill=BLACK)
 
     render(image)

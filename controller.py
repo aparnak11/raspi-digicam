@@ -5,6 +5,8 @@ from config import CAPTURE_BOX, GALLERY_BOX, BACK_BOX, PREV_BOX, NEXT_BOX
 from gallery import get_photos
 from touch import get_touch, in_box
 from ui import draw_camera, draw_gallery
+from config import DELETE_BOX
+from gallery import get_photos, delete_photo
 
 
 class DigicamController:
@@ -57,6 +59,9 @@ class DigicamController:
 
         elif in_box(lx, ly, NEXT_BOX):
             self.next_photo()
+        
+        elif in_box(lx, ly, DELETE_BOX):
+            self.delete_current_photo()
 
     def handle_capture(self, frame):
         draw_camera(frame, "SAVING...")
@@ -88,3 +93,20 @@ class DigicamController:
             draw_gallery(self.photo_paths, self.gallery_index)
 
         time.sleep(0.35)
+
+    def delete_current_photo(self):
+        if not self.photo_paths:
+            return
+
+        photo_to_delete = self.photo_paths[self.gallery_index]
+        delete_photo(photo_to_delete)
+
+        self.photo_paths = get_photos()
+
+        if not self.photo_paths:
+            self.gallery_index = 0
+        else:
+            self.gallery_index = min(self.gallery_index, len(self.photo_paths) - 1)
+
+        draw_gallery(self.photo_paths, self.gallery_index)
+        time.sleep(0.5)

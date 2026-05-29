@@ -16,3 +16,6 @@ def load_gallery_image(photo_paths, gallery_index):
     photo.thumbnail((300, 220))
 
     return photo, photo_path
+
+def delete_photo(photo_path):
+    photo_path.unlink()
