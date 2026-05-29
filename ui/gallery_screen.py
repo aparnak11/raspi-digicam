@@ -30,9 +30,9 @@ def draw_gallery(photo_paths, gallery_index):
         outline=PINK,
         width=2,
     )
-    draw.text((25, 13), "BACK", fill=BLACK)
+    draw.text((35, 13), "BACK", fill=BLACK)
 
-    draw.text((190, 10), "GALLERY", fill=BLACK)
+    draw.text((210, 10), "GALLERY", fill=BLACK)
 
     if not photo_paths:
         draw.text((175, 150), "NO PHOTOS YET", fill=BLACK)
@@ -44,7 +44,7 @@ def draw_gallery(photo_paths, gallery_index):
         image.paste(photo, (x, y))
 
         count_text = f"{gallery_index + 1}/{len(photo_paths)}"
-        draw.text((LW - 55, 12), count_text, fill=BLACK)
+        draw.text((LW - 40, 12), count_text, fill=BLACK)
         draw.text((120, LH - 24), photo_path.name, fill=BLACK)
 
     draw.rounded_rectangle(
@@ -54,7 +54,7 @@ def draw_gallery(photo_paths, gallery_index):
         outline=PINK,
         width=2,
     )
-    draw.text((26, 152), "PREV", fill=BLACK)
+    draw.text((22, 152), "PREVIOUS", fill=BLACK)
 
     draw.rounded_rectangle(
         NEXT_BOX,
@@ -63,9 +63,8 @@ def draw_gallery(photo_paths, gallery_index):
         outline=PINK,
         width=2,
     )
-    draw.text((417, 152), "NEXT", fill=BLACK)
+    draw.text((422, 152), "NEXT", fill=BLACK)
 
     draw.rectangle((0, LH - 32, LW, LH), fill=LIGHT_PINK)
-    draw.text((18, LH - 22), "USE PREV / NEXT / BACK", fill=BLACK)
 
     render(image)
