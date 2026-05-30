@@ -1,4 +1,5 @@
 from PIL import Image, ImageDraw
+from ui.common import render, TITLE_FONT, BUTTON_FONT, BODY_FONT, SMALL_FONT
 
 from config import LW, LH, BG, BLACK, PINK, LIGHT_PINK
 from ui.common import render
@@ -18,7 +19,7 @@ def draw_splash(message="Loading..."):
         width=4,
     )
 
-    draw.text((180, 130), "APARNA'S DIGICAM", fill=BLACK)
+    draw.text((180, 130), "APARNA'S DIGICAM", fill=BLACK, font=TITLE_FONT)
 
     draw.text((200, 205), message, fill=BLACK)
 
