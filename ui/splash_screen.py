@@ -19,7 +19,7 @@ def draw_splash(message="Loading..."):
         width=4,
     )
 
-    draw.text((120, 130), "APARNA'S DIGICAM", fill=BLACK, font=TITLE_FONT)
+    draw.text((145, 130), "APARNA'S DIGICAM", fill=BLACK, font=TITLE_FONT)
 
     draw.text((200, 205), message, fill=BLACK, font=BODY_FONT)
 

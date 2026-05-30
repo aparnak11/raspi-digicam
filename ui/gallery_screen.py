@@ -37,11 +37,11 @@ def draw_gallery(photo_paths, gallery_index, deleted_mode=False):
     )
     draw.text((35, 13), "BACK", fill=BLACK, font=SMALL_BUTTON_FONT)
 
-    title = "RECENTLY DELETED" if deleted_mode else "GALLERY"
-    draw.text((210, 10), title, fill=BLACK, font=TITLE_FONT)
+    title = "DELETED" if deleted_mode else "GALLERY"
+    draw.text((205, 10), title, fill=BLACK, font=TITLE_FONT)
 
     if not photo_paths:
-        draw.text((175, 150), "NO PHOTOS YET", fill=BLACK, font=BODY_FONT)
+        draw.text((200, 150), "NO PHOTOS YET", fill=BLACK, font=BODY_FONT)
     else:
         photo, photo_path = load_gallery_image(photo_paths, gallery_index)
 
@@ -60,7 +60,7 @@ def draw_gallery(photo_paths, gallery_index, deleted_mode=False):
         outline=PINK,
         width=2,
     )
-    draw.text((22, 152), "PREV", fill=BLACK, font=BIG_BUTTON_FONT)
+    draw.text((25, 152), "PREV", fill=BLACK, font=BIG_BUTTON_FONT)
 
     draw.rounded_rectangle(
         NEXT_BOX,
@@ -69,7 +69,7 @@ def draw_gallery(photo_paths, gallery_index, deleted_mode=False):
         outline=PINK,
         width=2,
     )
-    draw.text((422, 152), "NEXT", fill=BLACK, font=BIG_BUTTON_FONT)
+    draw.text((420, 152), "NEXT", fill=BLACK, font=BIG_BUTTON_FONT)
 
     draw.rectangle((0, LH - 32, LW, LH), fill=LIGHT_PINK)
 
@@ -81,7 +81,7 @@ def draw_gallery(photo_paths, gallery_index, deleted_mode=False):
             outline=PINK,
             width=2,
         )
-        draw.text((30, 300), "RESTORE", fill=BLACK, font=SMALL_BUTTON_FONT)
+        draw.text((25, 300), "RESTORE", fill=BLACK, font=SMALL_BUTTON_FONT)
 
         draw.rounded_rectangle(
             DELETE_FOREVER_BOX,
