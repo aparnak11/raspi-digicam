@@ -1,7 +1,16 @@
 import time
 
 from camera import get_frame, capture_photo
-from config import CAPTURE_BOX, GALLERY_BOX, BACK_BOX, PREV_BOX, NEXT_BOX
+from config import (
+    CAPTURE_BOX,
+    GALLERY_BOX,
+    MODE_BOX,
+    BACK_BOX,
+    PREV_BOX,
+    NEXT_BOX,
+    FILTERS,
+)
+from filters import apply_filter
 from gallery import get_photos
 from touch import get_touch, in_box
 from ui import draw_camera, draw_gallery
@@ -14,6 +23,7 @@ class DigicamController:
         self.mode = "camera"
         self.photo_paths = get_photos()
         self.gallery_index = max(0, len(self.photo_paths) - 1)
+        self.filter_index = 0
 
     def run(self):
         while True:
@@ -29,7 +39,8 @@ class DigicamController:
 
     def update_camera_mode(self, touch):
         frame = get_frame()
-        draw_camera(frame, "READY")
+        filtered_frame = apply_filter(frame, self.current_filter())
+        draw_camera(filtered_frame, "READY", self.current_filter())
 
         if not touch:
             return
@@ -38,10 +49,17 @@ class DigicamController:
         print(f"touch landscape: x={lx}, y={ly}")
 
         if in_box(lx, ly, CAPTURE_BOX):
-            self.handle_capture(frame)
+            self.handle_capture(filtered_frame)
 
         elif in_box(lx, ly, GALLERY_BOX):
             self.open_gallery()
+
+        elif in_box(lx, ly, MODE_BOX):
+            self.cycle_filter()
+
+    def cycle_filter(self):
+        self.filter_index = (self.filter_index + 1) % len(FILTERS)
+        time.sleep(0.35)
 
     def update_gallery_mode(self, touch):
         if not touch:
@@ -64,9 +82,9 @@ class DigicamController:
             self.delete_current_photo()
 
     def handle_capture(self, frame):
-        draw_camera(frame, "SAVING...")
-        capture_photo()
-        draw_camera(frame, "SAVED!")
+        draw_camera(frame, "SAVING...", self.current_filter())
+        capture_photo(frame)
+        draw_camera(frame, "SAVED!", self.current_filter())
         time.sleep(0.5)
 
         self.photo_paths = get_photos()
@@ -110,3 +128,6 @@ class DigicamController:
 
         draw_gallery(self.photo_paths, self.gallery_index)
         time.sleep(0.5)
+
+    def current_filter(self):
+        return FILTERS[self.filter_index]

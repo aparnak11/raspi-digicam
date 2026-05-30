@@ -17,9 +17,14 @@ def get_frame():
     return Image.fromarray(array).convert("RGB")
 
 
-def capture_photo():
+def capture_photo(image=None):
     filename = PHOTOS_DIR / f"photo_{datetime.now().strftime('%Y%m%d_%H%M%S')}.jpg"
-    picam2.capture_file(str(filename))
+
+    if image is not None:
+        image.save(filename)
+    else:
+        picam2.capture_file(str(filename))
+
     print(f"Saved: {filename}")
     return filename
 

@@ -11,12 +11,13 @@ from config import (
     GRAY,
     CAPTURE_BOX,
     GALLERY_BOX,
+    MODE_BOX,
 )
 
 from ui.common import render
 
 
-def draw_camera(frame=None, message="READY"):
+def draw_camera(frame=None, message="READY", filter_name="NORMAL"):
     image = Image.new("RGB", (LW, LH), BG)
     draw = ImageDraw.Draw(image)
 
@@ -35,15 +36,6 @@ def draw_camera(frame=None, message="READY"):
     draw.rectangle((220, 135, 260, 172), outline=GRAY, width=2)
 
     draw.rounded_rectangle(
-        (12, 70, 76, 125),
-        radius=12,
-        fill=LIGHT_PINK,
-        outline=PINK,
-        width=2,
-    )
-    draw.text((30, 90), "MODE", fill=BLACK)
-
-    draw.rounded_rectangle(
         GALLERY_BOX,
         radius=12,
         fill=LIGHT_PINK,
@@ -58,5 +50,15 @@ def draw_camera(frame=None, message="READY"):
     draw.rectangle((0, LH - 32, LW, LH), fill=LIGHT_PINK)
     draw.text((14, LH - 22), message, fill=BLACK)
     draw.text((LW - 45, LH - 22), "PHOTO", fill=BLACK)
+
+    draw.rounded_rectangle(
+        MODE_BOX,
+        radius=12,
+        fill=LIGHT_PINK,
+        outline=PINK,
+        width=2,
+    )
+    draw.text((25, 85), "MODE", fill=BLACK)
+    draw.text((LW/2, LH - 22), filter_name, fill=BLACK)
 
     render(image)
