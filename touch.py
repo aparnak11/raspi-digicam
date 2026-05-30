@@ -15,12 +15,21 @@ def in_box(lx, ly, box):
 
 
 def get_touch():
-    tp.read_touch_data()
-    point_count, coords = tp.get_touch_xy()
+    try:
+        tp.read_touch_data()
+        point_count, coords = tp.get_touch_xy()
 
-    if point_count > 0:
-        raw_x = coords[0]["x"]
-        raw_y = coords[0]["y"]
-        return touch_to_landscape(raw_x, raw_y)
+        if point_count <= 0 or not coords:
+            return None
 
-    return None
+        x = coords[0]["x"]
+        y = coords[0]["y"]
+
+        # Reject obviously bad/raw glitch coordinates
+        if not (0 <= x <= 320 and 0 <= y <= 480):
+            return None
+
+        return touch_to_landscape(x, y)
+
+    except OSError:
+        return None
