@@ -1,6 +1,6 @@
 import time
 
-from ui import draw_splash
+from ui import draw_splash, draw_shutdown_splash
 from camera import stop_camera
 from controller import DigicamController
 from display import clear_lcd
@@ -19,7 +19,14 @@ def main():
         print("Exiting...")
 
     finally:
+        draw_shutdown_splash("Saving...")
+        time.sleep(0.75)
+
         stop_camera()
+
+        draw_shutdown_splash("Goodbye!")
+        time.sleep(1.0)
+
         clear_lcd()
 
 

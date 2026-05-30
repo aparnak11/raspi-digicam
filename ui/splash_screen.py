@@ -24,3 +24,6 @@ def draw_splash(message="Loading..."):
     draw.text((200, 205), message, fill=BLACK, font=BODY_FONT)
 
     render(image)
+
+def draw_shutdown_splash(message="Goodbye!"):
+    draw_splash(message)
