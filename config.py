@@ -3,6 +3,9 @@ from pathlib import Path
 PHOTOS_DIR = Path.home() / "Desktop" / "Projects" / "digicam" / "photos"
 PHOTOS_DIR.mkdir(parents=True, exist_ok=True)
 
+RECENTLY_DELETED_DIR = Path.home() / "Desktop" / "Projects" / "digicam" / "recently_deleted"
+RECENTLY_DELETED_DIR.mkdir(parents=True, exist_ok=True)
+
 LW, LH = 480, 320
 
 BG = "#fffafc"

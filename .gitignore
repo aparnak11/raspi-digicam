@@ -1,4 +1,5 @@
 photos/
+recently_deleted/
 __pycache__/
 *.pyc
 .vscode/

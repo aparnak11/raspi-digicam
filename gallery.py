@@ -1,6 +1,7 @@
 from PIL import Image
 
-from config import PHOTOS_DIR
+from config import PHOTOS_DIR, RECENTLY_DELETED_DIR
+import shutil
 
 
 def get_photos():
@@ -18,4 +19,12 @@ def load_gallery_image(photo_paths, gallery_index):
     return photo, photo_path
 
 def delete_photo(photo_path):
-    photo_path.unlink()
+    deleted_path = RECENTLY_DELETED_DIR / photo_path.name
+
+    counter = 1
+    while deleted_path.exists():
+        deleted_path = RECENTLY_DELETED_DIR / f"{photo_path.stem}_{counter}{photo_path.suffix}"
+        counter += 1
+
+    shutil.move(str(photo_path), str(deleted_path))
+    return deleted_path
