@@ -1,0 +1,25 @@
+from PIL import Image, ImageDraw
+
+from config import LW, LH, BG, BLACK, PINK, LIGHT_PINK
+from ui.common import render
+
+
+def draw_splash(message="Loading..."):
+    image = Image.new("RGB", (LW, LH), BG)
+    draw = ImageDraw.Draw(image)
+
+    draw.rectangle((0, 0, LW, LH), fill=BG)
+
+    draw.rounded_rectangle(
+        (70, 75, 410, 245),
+        radius=24,
+        fill=LIGHT_PINK,
+        outline=PINK,
+        width=4,
+    )
+
+    draw.text((180, 130), "APARNA'S DIGICAM", fill=BLACK)
+
+    draw.text((200, 205), message, fill=BLACK)
+
+    render(image)
