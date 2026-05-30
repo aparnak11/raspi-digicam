@@ -26,6 +26,9 @@ from touch import get_touch, in_box
 from ui import draw_camera, draw_gallery
 from config import DELETE_BOX
 from gallery import get_photos, delete_photo
+from config import SHARE_BOX, SHARE_BACK_BOX
+from share_server import start_share_server
+from ui import draw_camera, draw_gallery, draw_share_screen
 
 
 class DigicamController:
@@ -49,6 +52,9 @@ class DigicamController:
 
             elif self.mode == "deleted":
                 self.update_deleted_mode(touch)
+
+            elif self.mode == "share":
+                self.update_share_mode(touch)
 
             time.sleep(0.05)
 
@@ -109,6 +115,9 @@ class DigicamController:
 
         elif in_box(lx, ly, RECENTLY_DELETED_BOX):
             self.open_recently_deleted()
+        
+        elif in_box(lx, ly, SHARE_BOX):
+            self.open_share()
 
     def handle_capture(self, frame):
         draw_camera(frame, "SAVING...", self.current_filter())
@@ -236,3 +245,24 @@ class DigicamController:
 
         draw_gallery(self.deleted_paths, self.deleted_index, deleted_mode=True)
         time.sleep(0.5)
+    
+    def open_share(self):
+        start_share_server()
+        self.mode = "share"
+        draw_share_screen()
+        time.sleep(0.5)
+
+
+    def update_share_mode(self, touch):
+        if not touch:
+            return
+
+        lx, ly = touch
+        print(f"share touch: x={lx}, y={ly}")
+
+        if in_box(lx, ly, SHARE_BACK_BOX):
+            self.mode = "gallery"
+            self.photo_paths = get_photos()
+            self.gallery_index = max(0, len(self.photo_paths) - 1)
+            draw_gallery(self.photo_paths, self.gallery_index)
+            time.sleep(0.5)

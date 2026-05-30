@@ -16,6 +16,7 @@ from config import (
     RECENTLY_DELETED_BOX,
     RESTORE_BOX,
     DELETE_FOREVER_BOX,
+    SHARE_BOX,
 )
 
 from gallery import load_gallery_image
@@ -110,5 +111,14 @@ def draw_gallery(photo_paths, gallery_index, deleted_mode=False):
             width=2,
         )
         draw.text((230, 300), "DELETE", fill=BLACK, font=SMALL_BUTTON_FONT)
+
+        draw.rounded_rectangle(
+            SHARE_BOX,
+            radius=8,
+            fill=WHITE,
+            outline=PINK,
+            width=2,
+        )
+        draw.text((350, 294), "SHARE", fill=BLACK, font=SMALL_BUTTON_FONT)
 
     render(image)
