@@ -61,7 +61,7 @@ class DigicamController:
     def update_camera_mode(self, touch):
         frame = get_frame()
         filtered_frame = apply_filter(frame, self.current_filter())
-        draw_camera(filtered_frame, "READY", self.current_filter())
+        draw_camera(filtered_frame, "Ready", self.current_filter().title())
 
         if not touch:
             return
@@ -121,9 +121,10 @@ class DigicamController:
             self.open_recently_deleted()
 
     def handle_capture(self, frame):
-        draw_camera(frame, "SAVING...", self.current_filter())
+        draw_camera(frame, "Saving...", self.current_filter().title())
+        time.sleep(0.2)
         capture_photo(frame)
-        draw_camera(frame, "SAVED!", self.current_filter())
+        draw_camera(frame, "Saved!", self.current_filter().title())
         time.sleep(0.5)
 
         self.photo_paths = get_photos()

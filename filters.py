@@ -12,7 +12,7 @@ def apply_filter(image, filter_name):
         b = b.point(lambda p: min(255, int(p * 1.05 + 10)))
         return Image.merge("RGB", (r, g, b))
 
-    if filter_name == "GOLDEN":
+    if filter_name == "SUNSET":
         image = ImageEnhance.Color(image).enhance(1.35)
         image = ImageEnhance.Contrast(image).enhance(1.12)
 

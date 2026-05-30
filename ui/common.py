@@ -16,6 +16,7 @@ BIG_BUTTON_FONT = load_font("Nunito-Bold.ttf", 13)
 SMALL_BUTTON_FONT = load_font("Nunito-Bold.ttf", 10)
 BODY_FONT = load_font("Nunito-Regular.ttf", 14)
 SMALL_FONT = load_font("Nunito-Regular.ttf", 11)
+DEFAULT_FONT = load_font("B612-BoldItalic.ttf", 14)
 
 def render(image):
     show_on_lcd(image)

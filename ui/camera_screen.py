@@ -1,65 +1,38 @@
+from datetime import datetime
+import shutil
 from PIL import Image, ImageDraw
-from ui.common import render, TITLE_FONT, BIG_BUTTON_FONT, SMALL_BUTTON_FONT, BODY_FONT, SMALL_FONT
 
 from config import (
-    LW,
-    LH,
-    BG,
+    CAMERA_UI_BG,
+    VIEWFINDER_BOX,
     BLACK,
-    PINK,
-    LIGHT_PINK,
-    DARK_PINK,
-    GRAY,
-    CAPTURE_BOX,
-    GALLERY_BOX,
-    MODE_BOX,
 )
 
-from ui.common import render
+from ui.common import render, BODY_FONT, SMALL_FONT, DEFAULT_FONT
 
 
-def draw_camera(frame=None, message="READY", filter_name="NORMAL"):
-    image = Image.new("RGB", (LW, LH), BG)
+def get_storage_text():
+    usage = shutil.disk_usage("/")
+    free_gb = usage.free / (1024 ** 3)
+    return f"{free_gb:.0f} GB"
+
+
+def draw_camera(frame=None, message="Ready", filter_name="Normal"):
+    image = Image.open(CAMERA_UI_BG).convert("RGB")
     draw = ImageDraw.Draw(image)
 
-    draw.rectangle((0, 0, LW, 36), fill=LIGHT_PINK)
-    draw.text((14, 10), "APARNA'S DIGICAM", fill=BLACK, font=TITLE_FONT)
-    draw.text((LW - 37, 10), "64GB", fill=BLACK, font=SMALL_FONT)
-
-    vf_x1, vf_y1 = 85, 45
-    vf_x2, vf_y2 = 398, 278
+    vf_x1, vf_y1, vf_x2, vf_y2 = VIEWFINDER_BOX
 
     if frame is not None:
         frame = frame.resize((vf_x2 - vf_x1, vf_y2 - vf_y1))
         image.paste(frame, (vf_x1, vf_y1))
 
-    draw.rectangle((vf_x1, vf_y1, vf_x2, vf_y2), outline=PINK, width=3)
-    draw.rectangle((220, 135, 260, 172), outline=GRAY, width=2)
+    current_time = datetime.now().strftime("%I:%M %p").lstrip("0")
+    storage_text = get_storage_text()
 
-    draw.rounded_rectangle(
-        GALLERY_BOX,
-        radius=12,
-        fill=LIGHT_PINK,
-        outline=PINK,
-        width=2,
-    )
-    draw.text((15, 175), "GALLERY", fill=BLACK, font=BIG_BUTTON_FONT)
-
-    draw.ellipse(CAPTURE_BOX, outline=DARK_PINK, width=5)
-    draw.ellipse((420, 135, 450, 165), fill=PINK)
-
-    draw.rectangle((0, LH - 32, LW, LH), fill=LIGHT_PINK)
-    draw.text((14, LH - 22), message, fill=BLACK, font=BODY_FONT)
-    draw.text((LW - 50, LH - 22), "PHOTO", fill=BLACK, font=BODY_FONT)
-
-    draw.rounded_rectangle(
-        MODE_BOX,
-        radius=12,
-        fill=LIGHT_PINK,
-        outline=PINK,
-        width=2,
-    )
-    draw.text((20, 85), "MODE", fill=BLACK, font=BIG_BUTTON_FONT)
-    draw.text((LW/2 - 20, LH - 22), filter_name, fill=BLACK, font=BODY_FONT)
+    draw.text((407, 8), current_time, fill=BLACK, font=DEFAULT_FONT)
+    draw.text((8, 298), message, fill=BLACK, font=DEFAULT_FONT)
+    draw.text((215, 298), filter_name.title(), fill=BLACK, font=DEFAULT_FONT)
+    draw.text((434, 298), storage_text, fill=BLACK, font=DEFAULT_FONT)
 
     render(image)
