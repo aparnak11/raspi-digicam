@@ -2,5 +2,6 @@ photos/
 recently_deleted/
 __pycache__/
 *.pyc
+venv/
 .vscode/
 *.log
