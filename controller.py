@@ -8,10 +8,20 @@ from config import (
     BACK_BOX,
     PREV_BOX,
     NEXT_BOX,
+    DELETE_BOX,
+    RECENTLY_DELETED_BOX,
+    RESTORE_BOX,
+    DELETE_FOREVER_BOX,
     FILTERS,
 )
 from filters import apply_filter
-from gallery import get_photos
+from gallery import (
+    get_photos,
+    delete_photo,
+    get_recently_deleted,
+    restore_photo,
+    permanently_delete_photo,
+)
 from touch import get_touch, in_box
 from ui import draw_camera, draw_gallery
 from config import DELETE_BOX
@@ -24,6 +34,8 @@ class DigicamController:
         self.photo_paths = get_photos()
         self.gallery_index = max(0, len(self.photo_paths) - 1)
         self.filter_index = 0
+        self.deleted_paths = get_recently_deleted()
+        self.deleted_index = max(0, len(self.deleted_paths) - 1)
 
     def run(self):
         while True:
@@ -34,6 +46,9 @@ class DigicamController:
 
             elif self.mode == "gallery":
                 self.update_gallery_mode(touch)
+
+            elif self.mode == "deleted":
+                self.update_deleted_mode(touch)
 
             time.sleep(0.05)
 
@@ -80,6 +95,20 @@ class DigicamController:
         
         elif in_box(lx, ly, DELETE_BOX):
             self.delete_current_photo()
+        
+        elif in_box(lx, ly, RECENTLY_DELETED_BOX):
+            self.open_recently_deleted()
+
+        elif in_box(lx, ly, RESTORE_BOX):
+            if self.mode == "deleted":
+                self.restore_current_deleted_photo()
+
+        elif in_box(lx, ly, DELETE_FOREVER_BOX):
+            if self.mode == "deleted":
+                self.permanently_delete_current_photo()
+
+        elif in_box(lx, ly, RECENTLY_DELETED_BOX):
+            self.open_recently_deleted()
 
     def handle_capture(self, frame):
         draw_camera(frame, "SAVING...", self.current_filter())
@@ -131,3 +160,79 @@ class DigicamController:
 
     def current_filter(self):
         return FILTERS[self.filter_index]
+
+    def open_recently_deleted(self):
+        self.deleted_paths = get_recently_deleted()
+        self.deleted_index = max(0, len(self.deleted_paths) - 1)
+        self.mode = "deleted"
+        draw_gallery(self.deleted_paths, self.deleted_index, deleted_mode=True)
+        time.sleep(0.5)
+
+
+    def update_deleted_mode(self, touch):
+        if not touch:
+            return
+
+        lx, ly = touch
+        print(f"deleted touch: x={lx}, y={ly}")
+
+        if in_box(lx, ly, BACK_BOX):
+            self.mode = "gallery"
+            self.photo_paths = get_photos()
+            self.gallery_index = max(0, len(self.photo_paths) - 1)
+            draw_gallery(self.photo_paths, self.gallery_index)
+            time.sleep(0.5)
+
+        elif in_box(lx, ly, PREV_BOX):
+            if self.deleted_paths:
+                self.deleted_index = max(0, self.deleted_index - 1)
+                draw_gallery(self.deleted_paths, self.deleted_index, deleted_mode=True)
+            time.sleep(0.35)
+
+        elif in_box(lx, ly, NEXT_BOX):
+            if self.deleted_paths:
+                self.deleted_index = min(len(self.deleted_paths) - 1, self.deleted_index + 1)
+                draw_gallery(self.deleted_paths, self.deleted_index, deleted_mode=True)
+            time.sleep(0.35)
+
+        elif in_box(lx, ly, RESTORE_BOX):
+            self.restore_current_deleted_photo()
+
+        elif in_box(lx, ly, DELETE_FOREVER_BOX):
+            self.permanently_delete_current_photo()
+
+
+    def restore_current_deleted_photo(self):
+        if not self.deleted_paths:
+            return
+
+        photo_to_restore = self.deleted_paths[self.deleted_index]
+        restore_photo(photo_to_restore)
+
+        self.deleted_paths = get_recently_deleted()
+
+        if not self.deleted_paths:
+            self.deleted_index = 0
+        else:
+            self.deleted_index = min(self.deleted_index, len(self.deleted_paths) - 1)
+
+        draw_gallery(self.deleted_paths, self.deleted_index, deleted_mode=True)
+        time.sleep(0.5)
+
+
+    def permanently_delete_current_photo(self):
+        if not self.deleted_paths:
+            return
+
+        photo_to_delete = self.deleted_paths[self.deleted_index]
+        permanently_delete_photo(photo_to_delete)
+
+        self.deleted_paths = get_recently_deleted()
+
+        if not self.deleted_paths:
+            self.deleted_index = 0
+        else:
+            self.deleted_index = min(self.deleted_index, len(self.deleted_paths) - 1)
+
+        draw_gallery(self.deleted_paths, self.deleted_index, deleted_mode=True)
+        time.sleep(0.5)

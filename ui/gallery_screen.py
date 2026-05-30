@@ -12,13 +12,16 @@ from config import (
     PREV_BOX,
     NEXT_BOX,
     DELETE_BOX,
+    RECENTLY_DELETED_BOX,
+    RESTORE_BOX,
+    DELETE_FOREVER_BOX,
 )
 
 from gallery import load_gallery_image
 from ui.common import render
 
 
-def draw_gallery(photo_paths, gallery_index):
+def draw_gallery(photo_paths, gallery_index, deleted_mode=False):
     image = Image.new("RGB", (LW, LH), BG)
     draw = ImageDraw.Draw(image)
 
@@ -33,7 +36,8 @@ def draw_gallery(photo_paths, gallery_index):
     )
     draw.text((35, 13), "BACK", fill=BLACK)
 
-    draw.text((220, 10), "GALLERY", fill=BLACK)
+    title = "RECENTLY DELETED" if deleted_mode else "GALLERY"
+    draw.text((210, 10), title, fill=BLACK)
 
     if not photo_paths:
         draw.text((175, 150), "NO PHOTOS YET", fill=BLACK)
@@ -68,13 +72,42 @@ def draw_gallery(photo_paths, gallery_index):
 
     draw.rectangle((0, LH - 32, LW, LH), fill=LIGHT_PINK)
 
-    draw.rounded_rectangle(
-        DELETE_BOX,
-        radius=8,
-        fill=WHITE,
-        outline=PINK,
-        width=2,
-    )
-    draw.text((225, 294), "DELETE", fill=BLACK)
+    if deleted_mode:
+        draw.rounded_rectangle(
+            RESTORE_BOX,
+            radius=8,
+            fill=WHITE,
+            outline=PINK,
+            width=2,
+        )
+        draw.text((30, 300), "RESTORE", fill=BLACK)
+
+        draw.rounded_rectangle(
+            DELETE_FOREVER_BOX,
+            radius=8,
+            fill=WHITE,
+            outline=PINK,
+            width=2,
+        )
+        draw.text((LW-95, 300), "DELETE FOREVER", fill=BLACK)
+
+    else:
+        draw.rounded_rectangle(
+            RECENTLY_DELETED_BOX,
+            radius=8,
+            fill=WHITE,
+            outline=PINK,
+            width=2,
+        )
+        draw.text((40, 300), "RECENTLY DELETED", fill=BLACK)
+
+        draw.rounded_rectangle(
+            DELETE_BOX,
+            radius=8,
+            fill=WHITE,
+            outline=PINK,
+            width=2,
+        )
+        draw.text((230, 300), "DELETE", fill=BLACK)
 
     render(image)

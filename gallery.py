@@ -28,3 +28,22 @@ def delete_photo(photo_path):
 
     shutil.move(str(photo_path), str(deleted_path))
     return deleted_path
+
+def get_recently_deleted():
+    return sorted(RECENTLY_DELETED_DIR.glob("*.jpg"), key=lambda p: p.stat().st_mtime)
+
+
+def restore_photo(photo_path):
+    restored_path = PHOTOS_DIR / photo_path.name
+
+    counter = 1
+    while restored_path.exists():
+        restored_path = PHOTOS_DIR / f"{photo_path.stem}_{counter}{photo_path.suffix}"
+        counter += 1
+
+    shutil.move(str(photo_path), str(restored_path))
+    return restored_path
+
+
+def permanently_delete_photo(photo_path):
+    photo_path.unlink()
