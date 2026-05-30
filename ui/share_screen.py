@@ -2,7 +2,7 @@ import qrcode
 from PIL import Image, ImageDraw
 
 from config import LW, LH, BG, BLACK, PINK, LIGHT_PINK, WHITE, TRANSFER_URL, SHARE_BACK_BOX
-from ui.common import render
+from ui.common import render, TITLE_FONT, BIG_BUTTON_FONT, SMALL_BUTTON_FONT, BODY_FONT, SMALL_FONT
 
 
 def draw_share_screen():
@@ -19,7 +19,7 @@ def draw_share_screen():
         outline=PINK,
         width=2,
     )
-    draw.text((25, 13), "BACK", fill=BLACK)
+    draw.text((25, 13), "BACK", fill=BLACK, font=SMALL_BUTTON_FONT)
 
     draw.rounded_rectangle(
         (80, 35, 400, 285),
@@ -29,10 +29,10 @@ def draw_share_screen():
         width=4,
     )
 
-    draw.text((150, 55), "PHOTO TRANSFER", fill=BLACK)
-    draw.text((135, 80), "Scan with iPhone", fill=BLACK)
+    draw.text((135, 55), "PHOTO TRANSFER", fill=BLACK, font=TITLE_FONT)
+    draw.text((135, 80), "Scan with iPhone", fill=BLACK, font=BODY_FONT)
 
     image.paste(qr, (155, 105))
-    draw.text((135, 285), TRANSFER_URL, fill=BLACK)
+    draw.text((135, 285), TRANSFER_URL, fill=BLACK, font=SMALL_FONT)
 
     render(image)

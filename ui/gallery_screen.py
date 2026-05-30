@@ -119,6 +119,6 @@ def draw_gallery(photo_paths, gallery_index, deleted_mode=False):
             outline=PINK,
             width=2,
         )
-        draw.text((350, 294), "SHARE", fill=BLACK, font=SMALL_BUTTON_FONT)
+        draw.text((LW-90, 300), "SHARE", fill=BLACK, font=SMALL_BUTTON_FONT)
 
     render(image)
