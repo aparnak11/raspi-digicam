@@ -12,7 +12,8 @@ def load_font(filename, size):
         return ImageFont.load_default()
 
 TITLE_FONT = load_font("Fredoka-Bold.ttf", 22)
-BUTTON_FONT = load_font("Nunito-Bold.ttf", 15)
+BIG_BUTTON_FONT = load_font("Nunito-Bold.ttf", 13)
+SMALL_BUTTON_FONT = load_font("Nunito-Bold.ttf", 10)
 BODY_FONT = load_font("Nunito-Regular.ttf", 14)
 SMALL_FONT = load_font("Nunito-Regular.ttf", 11)
 

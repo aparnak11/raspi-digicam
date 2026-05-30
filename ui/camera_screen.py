@@ -1,5 +1,5 @@
 from PIL import Image, ImageDraw
-from ui.common import render, TITLE_FONT, BUTTON_FONT, BODY_FONT, SMALL_FONT
+from ui.common import render, TITLE_FONT, BIG_BUTTON_FONT, SMALL_BUTTON_FONT, BODY_FONT, SMALL_FONT
 
 from config import (
     LW,
@@ -43,14 +43,14 @@ def draw_camera(frame=None, message="READY", filter_name="NORMAL"):
         outline=PINK,
         width=2,
     )
-    draw.text((23, 175), "GALLERY", fill=BLACK, font=BUTTON_FONT)
+    draw.text((15, 175), "GALLERY", fill=BLACK, font=BIG_BUTTON_FONT)
 
     draw.ellipse(CAPTURE_BOX, outline=DARK_PINK, width=5)
     draw.ellipse((420, 135, 450, 165), fill=PINK)
 
     draw.rectangle((0, LH - 32, LW, LH), fill=LIGHT_PINK)
     draw.text((14, LH - 22), message, fill=BLACK, font=BODY_FONT)
-    draw.text((LW - 45, LH - 22), "PHOTO", fill=BLACK, font=BODY_FONT)
+    draw.text((LW - 50, LH - 22), "PHOTO", fill=BLACK, font=BODY_FONT)
 
     draw.rounded_rectangle(
         MODE_BOX,
@@ -59,7 +59,7 @@ def draw_camera(frame=None, message="READY", filter_name="NORMAL"):
         outline=PINK,
         width=2,
     )
-    draw.text((25, 85), "MODE", fill=BLACK, font=BUTTON_FONT)
-    draw.text((LW/2, LH - 22), filter_name, fill=BLACK, font=BODY_FONT)
+    draw.text((20, 85), "MODE", fill=BLACK, font=BIG_BUTTON_FONT)
+    draw.text((LW/2 - 20, LH - 22), filter_name, fill=BLACK, font=BODY_FONT)
 
     render(image)

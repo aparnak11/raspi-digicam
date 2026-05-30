@@ -1,5 +1,5 @@
 from PIL import Image, ImageDraw
-from ui.common import render, TITLE_FONT, BUTTON_FONT, BODY_FONT, SMALL_FONT
+from ui.common import render, TITLE_FONT, BIG_BUTTON_FONT, SMALL_BUTTON_FONT, BODY_FONT, SMALL_FONT
 
 from config import (
     LW,
@@ -35,7 +35,7 @@ def draw_gallery(photo_paths, gallery_index, deleted_mode=False):
         outline=PINK,
         width=2,
     )
-    draw.text((35, 13), "BACK", fill=BLACK, font=BUTTON_FONT)
+    draw.text((35, 13), "BACK", fill=BLACK, font=SMALL_BUTTON_FONT)
 
     title = "RECENTLY DELETED" if deleted_mode else "GALLERY"
     draw.text((210, 10), title, fill=BLACK, font=TITLE_FONT)
@@ -60,7 +60,7 @@ def draw_gallery(photo_paths, gallery_index, deleted_mode=False):
         outline=PINK,
         width=2,
     )
-    draw.text((22, 152), "PREVIOUS", fill=BLACK, font=BUTTON_FONT)
+    draw.text((22, 152), "PREV", fill=BLACK, font=BIG_BUTTON_FONT)
 
     draw.rounded_rectangle(
         NEXT_BOX,
@@ -69,7 +69,7 @@ def draw_gallery(photo_paths, gallery_index, deleted_mode=False):
         outline=PINK,
         width=2,
     )
-    draw.text((422, 152), "NEXT", fill=BLACK, font=BUTTON_FONT)
+    draw.text((422, 152), "NEXT", fill=BLACK, font=BIG_BUTTON_FONT)
 
     draw.rectangle((0, LH - 32, LW, LH), fill=LIGHT_PINK)
 
@@ -81,7 +81,7 @@ def draw_gallery(photo_paths, gallery_index, deleted_mode=False):
             outline=PINK,
             width=2,
         )
-        draw.text((30, 300), "RESTORE", fill=BLACK, font=BUTTON_FONT)
+        draw.text((30, 300), "RESTORE", fill=BLACK, font=SMALL_BUTTON_FONT)
 
         draw.rounded_rectangle(
             DELETE_FOREVER_BOX,
@@ -90,7 +90,7 @@ def draw_gallery(photo_paths, gallery_index, deleted_mode=False):
             outline=PINK,
             width=2,
         )
-        draw.text((LW-95, 300), "DELETE FOREVER", fill=BLACK, font=BUTTON_FONT)
+        draw.text((LW-95, 300), "DELETE FOREVER", fill=BLACK, font=SMALL_BUTTON_FONT)
 
     else:
         draw.rounded_rectangle(
@@ -100,7 +100,7 @@ def draw_gallery(photo_paths, gallery_index, deleted_mode=False):
             outline=PINK,
             width=2,
         )
-        draw.text((40, 300), "RECENTLY DELETED", fill=BLACK, font=BUTTON_FONT)
+        draw.text((40, 300), "RECENTLY DELETED", fill=BLACK, font=SMALL_BUTTON_FONT)
 
         draw.rounded_rectangle(
             DELETE_BOX,
@@ -109,6 +109,6 @@ def draw_gallery(photo_paths, gallery_index, deleted_mode=False):
             outline=PINK,
             width=2,
         )
-        draw.text((230, 300), "DELETE", fill=BLACK, font=BUTTON_FONT)
+        draw.text((230, 300), "DELETE", fill=BLACK, font=SMALL_BUTTON_FONT)
 
     render(image)
