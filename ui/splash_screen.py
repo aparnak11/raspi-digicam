@@ -4,10 +4,12 @@ from ui.common import render, DEFAULT_FONT
 from config import LW, LH, BG, BLACK, PINK, LIGHT_PINK
 from ui.common import render
 
+from config import SPLASH_UI_BG
+
 
 def draw_splash(message="Loading..."):
     image = Image.open(
-        "assets/ui/splash_screen.png"
+        SPLASH_UI_BG
     ).convert("RGB")
 
     draw = ImageDraw.Draw(image)

@@ -187,12 +187,25 @@ class DigicamController:
         lx, ly = touch
         print(f"deleted touch: x={lx}, y={ly}")
 
+        print(f"RESTORE={in_box(lx, ly, RESTORE_BOX)}")
+        print(f"DELETE_FOREVER={in_box(lx, ly, DELETE_FOREVER_BOX)}")
+        print(f"SHARE={in_box(lx, ly, SHARE_BOX)}")
+
         if in_box(lx, ly, BACK_BOX):
             self.mode = "gallery"
             self.photo_paths = get_photos()
             self.gallery_index = max(0, len(self.photo_paths) - 1)
             draw_gallery(self.photo_paths, self.gallery_index)
             time.sleep(0.5)
+
+        elif in_box(lx, ly, SHARE_BOX):
+            self.open_share()
+
+        elif in_box(lx, ly, RESTORE_BOX):
+            self.restore_current_deleted_photo()
+
+        elif in_box(lx, ly, DELETE_FOREVER_BOX):
+            self.permanently_delete_current_photo()
 
         elif in_box(lx, ly, PREV_BOX):
             if self.deleted_paths:
@@ -205,13 +218,6 @@ class DigicamController:
                 self.deleted_index = min(len(self.deleted_paths) - 1, self.deleted_index + 1)
                 draw_gallery(self.deleted_paths, self.deleted_index, deleted_mode=True)
             time.sleep(0.35)
-
-        elif in_box(lx, ly, RESTORE_BOX):
-            self.restore_current_deleted_photo()
-
-        elif in_box(lx, ly, DELETE_FOREVER_BOX):
-            self.permanently_delete_current_photo()
-
 
     def restore_current_deleted_photo(self):
         if not self.deleted_paths:

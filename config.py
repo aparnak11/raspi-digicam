@@ -1,5 +1,12 @@
 from pathlib import Path
 
+PROJECT_ROOT = Path(__file__).resolve().parent
+
+CAMERA_UI_BG = PROJECT_ROOT / "assets" / "ui" / "camera_screen.png"
+GALLERY_UI_BG = PROJECT_ROOT / "assets" / "ui" / "gallery_screen.png"
+SPLASH_UI_BG = PROJECT_ROOT / "assets" / "ui" / "splash_screen.png"
+RECENTLY_DELETED_UI_BG = PROJECT_ROOT / "assets" / "ui" / "recently_deleted_screen.png"
+
 PHOTOS_DIR = Path.home() / "Desktop" / "Projects" / "digicam" / "photos"
 PHOTOS_DIR.mkdir(parents=True, exist_ok=True)
 
@@ -16,8 +23,6 @@ LIGHT_PINK = "#f4c2d7"
 DARK_PINK = "#b84f74"
 GRAY = "#888888"
 
-CAMERA_UI_BG = "assets/ui/camera_screen.png"
-
 VIEWFINDER_BOX = (64, 44, 415, 276)
 FILTER_BOX = (8, 80, 56, 130)
 MODE_BOX = FILTER_BOX
@@ -27,16 +32,26 @@ CAPTURE_BOX = (415, 130, 475, 190)
 
 FILTERS = ["NORMAL", "B&W", "PINK", "SUNSET"]
 
-BACK_BOX = (12, 6, 82, 32)
-PREV_BOX = (12, 130, 78, 190)
-NEXT_BOX = (402, 130, 468, 190)
-DELETE_BOX = (225, 294, 275, 315)
 
-RECENTLY_DELETED_BOX = (25, 294, 150, 315)
-RESTORE_BOX = (12, 294, 80, 315)
-DELETE_FOREVER_BOX = (LW-100, 294, LW-5, 315)
+GALLERY_IMAGE_BOX = (65, 45, 415, 276)
 
-SHARE_BOX = (LW-100, 294, LW-50, 315)
+BACK_BOX = (0, 0, 80, 30)
+PREV_BOX = (8, 135, 56, 184)
+NEXT_BOX = (424, 135, 472, 184)
+
+GALLERY_IMAGE_BOX = (65, 45, 415, 276)
+
+BACK_BOX = (0, 0, 80, 30)
+PREV_BOX = (8, 135, 56, 184)
+NEXT_BOX = (424, 135, 472, 184)
+
+RECENTLY_DELETED_BOX = (0, 290, 140, 320)
+DELETE_BOX = (220, 290, 260, 320)
+SHARE_BOX = (430, 290, 480, 320)
+
+RESTORE_BOX = (0, 290, 150, 320)
+DELETE_FOREVER_BOX = (215, 290, 265, 320)
+
 SHARE_BACK_BOX = (12, 6, 82, 32)
 
 TRANSFER_URL = "http://192.168.4.1:8000"

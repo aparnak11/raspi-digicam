@@ -1,124 +1,60 @@
 from PIL import Image, ImageDraw
-from ui.common import render, TITLE_FONT, BIG_BUTTON_FONT, SMALL_BUTTON_FONT, BODY_FONT, SMALL_FONT
 
 from config import (
     LW,
-    LH,
-    BG,
+    GALLERY_UI_BG,
+    RECENTLY_DELETED_UI_BG,
+    GALLERY_IMAGE_BOX,
     BLACK,
-    WHITE,
-    PINK,
-    LIGHT_PINK,
-    BACK_BOX,
-    PREV_BOX,
-    NEXT_BOX,
-    DELETE_BOX,
-    RECENTLY_DELETED_BOX,
-    RESTORE_BOX,
-    DELETE_FOREVER_BOX,
-    SHARE_BOX,
 )
 
 from gallery import load_gallery_image
-from ui.common import render
+from ui.common import render, DEFAULT_FONT
+
+
+def center_text(draw, text, y, font, fill=BLACK):
+    bbox = draw.textbbox((0, 0), text, font=font)
+    text_width = bbox[2] - bbox[0]
+    x = (LW - text_width) // 2
+    draw.text((x, y), text, fill=fill, font=font)
+
+
+def right_text(draw, text, y, font, fill=BLACK, right_x=474):
+    bbox = draw.textbbox((0, 0), text, font=font)
+    text_width = bbox[2] - bbox[0]
+    x = right_x - text_width
+    draw.text((x, y), text, fill=fill, font=font)
 
 
 def draw_gallery(photo_paths, gallery_index, deleted_mode=False):
-    image = Image.new("RGB", (LW, LH), BG)
+    bg_path = RECENTLY_DELETED_UI_BG if deleted_mode else GALLERY_UI_BG
+    image = Image.open(bg_path).convert("RGB")
     draw = ImageDraw.Draw(image)
 
-    draw.rectangle((0, 0, LW, 36), fill=LIGHT_PINK)
+    title = "Recently Deleted" if deleted_mode else "Gallery"
 
-    draw.rounded_rectangle(
-        BACK_BOX,
-        radius=8,
-        fill=WHITE,
-        outline=PINK,
-        width=2,
-    )
-    draw.text((35, 13), "BACK", fill=BLACK, font=SMALL_BUTTON_FONT)
+    # These text labels are dynamic so you can keep your Figma placeholder text generic.
+    draw.text((18, 8), "Back", fill=BLACK, font=DEFAULT_FONT)
+    center_text(draw, title, 8, DEFAULT_FONT)
 
-    title = "DELETED" if deleted_mode else "GALLERY"
-    draw.text((205, 10), title, fill=BLACK, font=TITLE_FONT)
+    if photo_paths:
+        count_text = f"{gallery_index + 1}/{len(photo_paths)}"
+    else:
+        count_text = "0/0"
+
+    right_text(draw, count_text, 8, DEFAULT_FONT)
+
+    x1, y1, x2, y2 = GALLERY_IMAGE_BOX
 
     if not photo_paths:
-        draw.text((200, 150), "NO PHOTOS YET", fill=BLACK, font=BODY_FONT)
+        center_text(draw, "No Photos", 150, DEFAULT_FONT)
     else:
         photo, photo_path = load_gallery_image(photo_paths, gallery_index)
+        photo.thumbnail((x2 - x1, y2 - y1))
 
-        x = (LW - photo.width) // 2
-        y = 55
+        x = x1 + ((x2 - x1) - photo.width) // 2
+        y = y1 + ((y2 - y1) - photo.height) // 2
+
         image.paste(photo, (x, y))
-
-        count_text = f"{gallery_index + 1}/{len(photo_paths)}"
-        draw.text((LW - 40, 12), count_text, fill=BLACK, font=SMALL_FONT)
-        draw.text((120, LH - 24), photo_path.name, fill=BLACK, font=BODY_FONT)
-
-    draw.rounded_rectangle(
-        PREV_BOX,
-        radius=12,
-        fill=LIGHT_PINK,
-        outline=PINK,
-        width=2,
-    )
-    draw.text((25, 152), "PREV", fill=BLACK, font=BIG_BUTTON_FONT)
-
-    draw.rounded_rectangle(
-        NEXT_BOX,
-        radius=12,
-        fill=LIGHT_PINK,
-        outline=PINK,
-        width=2,
-    )
-    draw.text((420, 152), "NEXT", fill=BLACK, font=BIG_BUTTON_FONT)
-
-    draw.rectangle((0, LH - 32, LW, LH), fill=LIGHT_PINK)
-
-    if deleted_mode:
-        draw.rounded_rectangle(
-            RESTORE_BOX,
-            radius=8,
-            fill=WHITE,
-            outline=PINK,
-            width=2,
-        )
-        draw.text((25, 300), "RESTORE", fill=BLACK, font=SMALL_BUTTON_FONT)
-
-        draw.rounded_rectangle(
-            DELETE_FOREVER_BOX,
-            radius=8,
-            fill=WHITE,
-            outline=PINK,
-            width=2,
-        )
-        draw.text((LW-95, 300), "DELETE FOREVER", fill=BLACK, font=SMALL_BUTTON_FONT)
-
-    else:
-        draw.rounded_rectangle(
-            RECENTLY_DELETED_BOX,
-            radius=8,
-            fill=WHITE,
-            outline=PINK,
-            width=2,
-        )
-        draw.text((40, 300), "RECENTLY DELETED", fill=BLACK, font=SMALL_BUTTON_FONT)
-
-        draw.rounded_rectangle(
-            DELETE_BOX,
-            radius=8,
-            fill=WHITE,
-            outline=PINK,
-            width=2,
-        )
-        draw.text((230, 300), "DELETE", fill=BLACK, font=SMALL_BUTTON_FONT)
-
-        draw.rounded_rectangle(
-            SHARE_BOX,
-            radius=8,
-            fill=WHITE,
-            outline=PINK,
-            width=2,
-        )
-        draw.text((LW-90, 300), "SHARE", fill=BLACK, font=SMALL_BUTTON_FONT)
 
     render(image)
