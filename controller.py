@@ -13,6 +13,9 @@ from config import (
     RESTORE_BOX,
     DELETE_FOREVER_BOX,
     FILTERS,
+    SHUTDOWN_BOX,
+    SHUTDOWN_CONFIRM_POWER_BOX,
+    SHUTDOWN_CONFIRM_CANCEL_BOX,
 )
 from filters import apply_filter
 from gallery import (
@@ -29,6 +32,9 @@ from gallery import get_photos, delete_photo
 from config import SHARE_BOX, SHARE_BACK_BOX
 from share_server import start_share_server
 from ui import draw_camera, draw_gallery, draw_share_screen
+from config import SHUTDOWN_BOX
+from ui import draw_shutdown_confirm, draw_shutdown_splash
+from systems_control import shutdown_pi
 
 
 class DigicamController:
@@ -56,6 +62,9 @@ class DigicamController:
 
             elif self.mode == "share":
                 self.update_share_mode(touch)
+            
+            elif self.mode == "shutdown_confirm":
+                self.update_shutdown_confirm_mode(touch)
 
             time.sleep(0.05)
 
@@ -70,7 +79,11 @@ class DigicamController:
         lx, ly = touch
         print(f"touch landscape: x={lx}, y={ly}")
 
-        if in_box(lx, ly, CAPTURE_BOX):
+        if in_box(lx, ly, SHUTDOWN_BOX):
+            self.mode = "shutdown_confirm"
+            draw_shutdown_confirm()
+            time.sleep(0.5)
+        elif in_box(lx, ly, CAPTURE_BOX):
             self.handle_capture(filtered_frame)
 
         elif in_box(lx, ly, GALLERY_BOX):
@@ -290,3 +303,19 @@ class DigicamController:
                 draw_gallery(self.photo_paths, self.gallery_index)
 
             time.sleep(0.5)
+    
+    def update_shutdown_confirm_mode(self, touch):
+        if not touch:
+            return
+
+        lx, ly = touch
+        print(f"shutdown touch: x={lx}, y={ly}")
+
+        if in_box(lx, ly, SHUTDOWN_CONFIRM_CANCEL_BOX):
+            self.mode = "camera"
+            time.sleep(0.5)
+
+        elif in_box(lx, ly, SHUTDOWN_CONFIRM_POWER_BOX):
+            draw_shutdown_splash("Goodbye!")
+            time.sleep(1.0)
+            shutdown_pi()
