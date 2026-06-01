@@ -39,6 +39,7 @@ class DigicamController:
         self.filter_index = 0
         self.deleted_paths = get_recently_deleted()
         self.deleted_index = max(0, len(self.deleted_paths) - 1)
+        self.previous_mode = "gallery"
 
     def run(self):
         while True:
@@ -257,6 +258,8 @@ class DigicamController:
     def open_share(self):
         print("Opening share screen...")
 
+        self.previous_mode = self.mode
+
         self.mode = "share"
         draw_share_screen()
         print("Share screen drawn")
@@ -275,8 +278,15 @@ class DigicamController:
         print(f"share touch: x={lx}, y={ly}")
 
         if in_box(lx, ly, SHARE_BACK_BOX):
-            self.mode = "gallery"
-            self.photo_paths = get_photos()
-            self.gallery_index = max(0, len(self.photo_paths) - 1)
-            draw_gallery(self.photo_paths, self.gallery_index)
+            if self.previous_mode == "deleted":
+                self.mode = "deleted"
+                self.deleted_paths = get_recently_deleted()
+                self.deleted_index = max(0, len(self.deleted_paths) - 1)
+                draw_gallery(self.deleted_paths, self.deleted_index, deleted_mode=True)
+            else:
+                self.mode = "gallery"
+                self.photo_paths = get_photos()
+                self.gallery_index = max(0, len(self.photo_paths) - 1)
+                draw_gallery(self.photo_paths, self.gallery_index)
+
             time.sleep(0.5)
