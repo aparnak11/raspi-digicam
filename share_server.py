@@ -1,11 +1,20 @@
 from http.server import ThreadingHTTPServer, BaseHTTPRequestHandler
 from urllib.parse import unquote
-from pathlib import Path
 import threading
 
 from config import PHOTOS_DIR, TRANSFER_PORT
 
+
 _server_started = False
+
+
+def get_shareable_photos():
+    photos = []
+
+    for extension in ("*.jpg", "*.jpeg", "*.png"):
+        photos.extend(PHOTOS_DIR.glob(extension))
+
+    return sorted(photos, key=lambda p: p.stat().st_mtime, reverse=True)
 
 
 class PhotoShareHandler(BaseHTTPRequestHandler):
@@ -15,26 +24,33 @@ class PhotoShareHandler(BaseHTTPRequestHandler):
             return
 
         if self.path.startswith("/photo/"):
-            filename = unquote(self.path.replace("/photo/", ""))
-            photo_path = PHOTOS_DIR / filename
-
-            if photo_path.exists() and photo_path.suffix.lower() in [".jpg", ".jpeg", ".png"]:
-                self.send_response(200)
-                self.send_header("Content-Type", "image/jpeg")
-                self.send_header("Content-Disposition", f'attachment; filename="{filename}"')
-                self.end_headers()
-
-                with open(photo_path, "rb") as f:
-                    self.wfile.write(f.read())
-            else:
-                self.send_error(404)
-
+            self.send_photo()
             return
 
         self.send_error(404)
 
+    def send_photo(self):
+        filename = unquote(self.path.replace("/photo/", ""))
+        photo_path = PHOTOS_DIR / filename
+
+        if not photo_path.exists():
+            self.send_error(404)
+            return
+
+        if photo_path.suffix.lower() not in [".jpg", ".jpeg", ".png"]:
+            self.send_error(404)
+            return
+
+        self.send_response(200)
+        self.send_header("Content-Type", "image/jpeg")
+        self.send_header("Content-Disposition", f'attachment; filename="{filename}"')
+        self.end_headers()
+
+        with open(photo_path, "rb") as f:
+            self.wfile.write(f.read())
+
     def show_gallery(self):
-        photos = sorted(PHOTOS_DIR.glob("*.jpg"), key=lambda p: p.stat().st_mtime, reverse=True)
+        photos = get_shareable_photos()
 
         html = """
         <!DOCTYPE html>
@@ -92,12 +108,6 @@ class PhotoShareHandler(BaseHTTPRequestHandler):
                     color: #111;
                     font-weight: bold;
                     text-decoration: none;
-                }
-
-                .filename {
-                    font-size: 11px;
-                    word-break: break-word;
-                    opacity: 0.7;
                 }
             </style>
         </head>

@@ -8,6 +8,7 @@ import os
 from config import LW, LH, BG, BLACK, PINK, LIGHT_PINK
 from ui.common import render
 
+
 PHOTOS_DIR = Path.home() / "Desktop" / "Projects" / "digicam" / "photos"
 HOST = "0.0.0.0"
 PORT = 8000
@@ -16,9 +17,12 @@ URL = "http://192.168.4.1:8000"
 
 def start_server():
     os.chdir(PHOTOS_DIR)
+
     server = ThreadingHTTPServer((HOST, PORT), SimpleHTTPRequestHandler)
+
     print(f"Serving photos from: {PHOTOS_DIR}")
     print(f"Open on iPhone: {URL}")
+
     server.serve_forever()
 
 
@@ -46,9 +50,14 @@ def show_qr():
     render(image)
 
 
-server_thread = threading.Thread(target=start_server, daemon=True)
-server_thread.start()
+def main():
+    server_thread = threading.Thread(target=start_server, daemon=True)
+    server_thread.start()
 
-show_qr()
+    show_qr()
 
-input("Server running. Press Enter to stop...")
+    input("Server running. Press Enter to stop...")
+
+
+if __name__ == "__main__":
+    main()

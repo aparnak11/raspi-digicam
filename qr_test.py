@@ -4,29 +4,35 @@ from PIL import Image, ImageDraw
 from config import LW, LH, BG, BLACK, PINK, LIGHT_PINK
 from ui.common import render
 
-url = "http://192.168.4.1:8000"
 
-qr = qrcode.make(url).convert("RGB")
-qr = qr.resize((170, 170))
+def main():
+    url = "http://192.168.4.1:8000"
 
-image = Image.new("RGB", (LW, LH), BG)
-draw = ImageDraw.Draw(image)
+    qr = qrcode.make(url).convert("RGB")
+    qr = qr.resize((170, 170))
 
-draw.rounded_rectangle(
-    (80, 35, 400, 285),
-    radius=20,
-    fill=LIGHT_PINK,
-    outline=PINK,
-    width=4,
-)
+    image = Image.new("RGB", (LW, LH), BG)
+    draw = ImageDraw.Draw(image)
 
-draw.text((150, 55), "PHOTO TRANSFER", fill=BLACK)
-draw.text((135, 80), "Scan with iPhone", fill=BLACK)
+    draw.rounded_rectangle(
+        (80, 35, 400, 285),
+        radius=20,
+        fill=LIGHT_PINK,
+        outline=PINK,
+        width=4,
+    )
 
-image.paste(qr, (155, 105))
+    draw.text((150, 55), "PHOTO TRANSFER", fill=BLACK)
+    draw.text((135, 80), "Scan with iPhone", fill=BLACK)
 
-draw.text((145, 285), url, fill=BLACK)
+    image.paste(qr, (155, 105))
 
-render(image)
+    draw.text((145, 285), url, fill=BLACK)
 
-input("Press Enter to exit...")
+    render(image)
+
+    input("Press Enter to exit...")
+
+
+if __name__ == "__main__":
+    main()

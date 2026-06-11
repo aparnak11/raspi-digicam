@@ -1,11 +1,20 @@
 from vendor.waveshare import ft6336u
 
-tp = ft6336u.ft6336u()
+
+TOUCH_WIDTH = 320
+TOUCH_HEIGHT = 480
+
+
+def create_touchscreen():
+    return ft6336u.ft6336u()
+
+
+tp = create_touchscreen()
 
 
 def touch_to_landscape(x, y):
-    lx = 480 - y
-    ly = 320 - x
+    lx = TOUCH_HEIGHT - y
+    ly = TOUCH_WIDTH - x
     return lx, ly
 
 
@@ -25,8 +34,7 @@ def get_touch():
         x = coords[0]["x"]
         y = coords[0]["y"]
 
-        # Reject obviously bad/raw glitch coordinates
-        if not (0 <= x <= 320 and 0 <= y <= 480):
+        if not (0 <= x <= TOUCH_WIDTH and 0 <= y <= TOUCH_HEIGHT):
             return None
 
         return touch_to_landscape(x, y)

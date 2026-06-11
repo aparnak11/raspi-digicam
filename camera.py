@@ -1,32 +1,48 @@
-from picamera2 import Picamera2
-from PIL import Image
 from datetime import datetime
 import time
 
+from picamera2 import Picamera2
+from PIL import Image
+
 from config import PHOTOS_DIR
 
+
+CAMERA_RESOLUTION = (640, 480)
+CAMERA_WARMUP_SECONDS = 1
+
+
 picam2 = Picamera2()
-config = picam2.create_preview_configuration(main={"size": (640, 480)})
-picam2.configure(config)
+
+camera_config = picam2.create_preview_configuration(
+    main={"size": CAMERA_RESOLUTION}
+)
+
+picam2.configure(camera_config)
 picam2.start()
-time.sleep(1)
+
+time.sleep(CAMERA_WARMUP_SECONDS)
 
 
 def get_frame():
-    array = picam2.capture_array()
-    return Image.fromarray(array).convert("RGB")
+    frame = picam2.capture_array()
+    return Image.fromarray(frame).convert("RGB")
+
+
+def generate_photo_path():
+    timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
+    return PHOTOS_DIR / f"photo_{timestamp}.jpg"
 
 
 def capture_photo(image=None):
-    filename = PHOTOS_DIR / f"photo_{datetime.now().strftime('%Y%m%d_%H%M%S')}.jpg"
+    photo_path = generate_photo_path()
 
     if image is not None:
-        image.save(filename)
+        image.save(photo_path)
     else:
-        picam2.capture_file(str(filename))
+        picam2.capture_file(str(photo_path))
 
-    print(f"Saved: {filename}")
-    return filename
+    print(f"Saved: {photo_path}")
+    return photo_path
 
 
 def stop_camera():

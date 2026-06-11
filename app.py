@@ -1,14 +1,19 @@
 import time
 
-from ui import draw_splash, draw_shutdown_splash
 from camera import stop_camera
 from controller import DigicamController
 from display import clear_lcd
+from ui import draw_shutdown_splash, draw_splash
+
+
+STARTUP_DELAY_SECONDS = 1.5
+SHUTDOWN_SAVE_DELAY_SECONDS = 0.75
+SHUTDOWN_GOODBYE_DELAY_SECONDS = 1.0
 
 
 def main():
     draw_splash("Loading...")
-    time.sleep(1.5)
+    time.sleep(STARTUP_DELAY_SECONDS)
 
     controller = DigicamController()
 
@@ -19,15 +24,19 @@ def main():
         print("Exiting...")
 
     finally:
-        draw_shutdown_splash("Saving...")
-        time.sleep(0.75)
+        shutdown_cleanly()
 
-        stop_camera()
 
-        draw_shutdown_splash("Goodbye!")
-        time.sleep(1.0)
+def shutdown_cleanly():
+    draw_shutdown_splash("Saving...")
+    time.sleep(SHUTDOWN_SAVE_DELAY_SECONDS)
 
-        clear_lcd()
+    stop_camera()
+
+    draw_shutdown_splash("Goodbye!")
+    time.sleep(SHUTDOWN_GOODBYE_DELAY_SECONDS)
+
+    clear_lcd()
 
 
 if __name__ == "__main__":

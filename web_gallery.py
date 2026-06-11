@@ -2,19 +2,27 @@ from http.server import ThreadingHTTPServer, SimpleHTTPRequestHandler
 from pathlib import Path
 import os
 
+
 PHOTOS_DIR = Path.home() / "Desktop" / "Projects" / "digicam" / "photos"
+HOST = "0.0.0.0"
 PORT = 8000
 
-os.chdir(PHOTOS_DIR)
 
-server = ThreadingHTTPServer(("0.0.0.0", PORT), SimpleHTTPRequestHandler)
+def main():
+    os.chdir(PHOTOS_DIR)
 
-print(f"Serving photos from: {PHOTOS_DIR}")
-print(f"Open on iPhone: http://raspberrypi.local:{PORT}")
-print("Press Ctrl+C to stop.")
+    server = ThreadingHTTPServer((HOST, PORT), SimpleHTTPRequestHandler)
 
-try:
-    server.serve_forever()
-except KeyboardInterrupt:
-    print("\nStopping server...")
-    server.server_close()
+    print(f"Serving photos from: {PHOTOS_DIR}")
+    print(f"Open on iPhone: http://raspberrypi.local:{PORT}")
+    print("Press Ctrl+C to stop.")
+
+    try:
+        server.serve_forever()
+    except KeyboardInterrupt:
+        print("\nStopping server...")
+        server.server_close()
+
+
+if __name__ == "__main__":
+    main()

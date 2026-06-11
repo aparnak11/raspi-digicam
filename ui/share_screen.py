@@ -2,7 +2,7 @@ import qrcode
 from PIL import Image, ImageDraw
 
 from config import SHARE_UI_BG, SHARE_QR_BOX, TRANSFER_URL, BLACK
-from ui.common import render, SMALL_FONT, DEFAULT_FONT
+from ui.common import render, DEFAULT_FONT
 
 
 def draw_share_screen():
